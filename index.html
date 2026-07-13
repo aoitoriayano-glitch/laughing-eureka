@@ -1,23 +1,251 @@
-Hello
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
 <meta charset="UTF-8">
-<title>4択クイズ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>アメリカ歴史クイズ</title>
+
+<style>
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #eef5ff;
+  padding: 20px;
+}
+
+.box {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 10px #aaa;
+}
+
+button {
+  width: 90%;
+  padding: 15px;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+.review {
+  text-align: left;
+}
+</style>
+
 </head>
 
 <body>
 
+<div class="box">
+
 <h1>🇺🇸 アメリカ歴史クイズ</h1>
 
-<h2>アメリカ独立宣言の年は？</h2>
+<h2 id="question"></h2>
 
-<button>1492年</button>
-<button>1776年</button>
-<button>1861年</button>
-<button>1945年</button>
+<div id="answers"></div>
 
-</body>
+<h3 id="message"></h3>
 
-</html>
+<button onclick="nextQuestion()">次の問題</button>
+
+<div id="result"></div>
+
+</div>
+
+
+<script>
+
+const quiz = [
+
+{
+question:"アメリカ独立宣言が発表された年は？",
+answers:["1492年","1776年","1861年","1945年"],
+correct:1,
+explanation:"1776年7月4日に独立宣言が採択されました。"
+},
+
+{
+question:"アメリカ初代大統領は誰？",
+answers:[
+"リンカーン",
+"ジェファーソン",
+"ジョージ・ワシントン",
+"ルーズベルト"
+],
+correct:2,
+explanation:"ジョージ・ワシントンは1789年に初代大統領になりました。"
+},
+
+{
+question:"南北戦争の主な原因は？",
+answers:[
+"宇宙開発",
+"奴隷制度をめぐる対立",
+"石油問題",
+"移民問題"
+],
+correct:1,
+explanation:"奴隷制度をめぐる対立が大きな原因でした。"
+},
+
+{
+question:"自由の女神像はどこの国から贈られた？",
+answers:[
+"イギリス",
+"フランス",
+"スペイン",
+"ドイツ"
+],
+correct:1,
+explanation:"1886年にフランスから贈られました。"
+},
+
+{
+question:"アメリカ国歌の元になった戦争は？",
+answers:[
+"独立戦争",
+"南北戦争",
+"米英戦争",
+"第一次世界大戦"
+],
+correct:2,
+explanation:"米英戦争中の出来事が国歌の元になりました。"
+}
+
+];
+
+
+let current = 0;
+let score = 0;
+let results = [];
+
+
+
+function showQuestion(){
+
+let q = quiz[current];
+
+document.getElementById("question").innerText =
+(current+1)+"問目："+q.question;
+
+
+let html="";
+
+
+q.answers.forEach((answer,index)=>{
+
+html += `
+<button onclick="checkAnswer(${index})">
+${answer}
+</button>
+`;
+
+});
+
+
+document.getElementById("answers").innerHTML=html;
+
+document.getElementById("message").innerText="";
+
+}
+
+
+
+function checkAnswer(index){
+
+let q = quiz[current];
+
+
+if(index === q.correct){
+
+score++;
+
+results.push("⭕ "+q.question+" 正解："+q.answers[q.correct]);
+
+document.getElementById("message").innerText="⭕ 正解！";
+
+}else{
+
+results.push("❌ "+q.question+" 正解："+q.answers[q.correct]);
+
+document.getElementById("message").innerText="❌ 不正解！";
+
+}
+
+}
+
+
+
+function nextQuestion(){
+
+current++;
+
+
+if(current < quiz.length){
+
+showQuestion();
+
+}else{
+
+finish();
+
+}
+
+}
+
+
+
+function finish(){
+
+
+let rank;
+
+
+if(score===5){
+
+rank="🏆 アメリカ歴史博士";
+
+}else if(score>=3){
+
+rank="🥇 歴史マスター";
+
+}else{
+
+rank="🌱 歴史初心者";
+
+}
+
+
+document.getElementById("question").innerText=
+"🎉 クイズ終了！";
+
+
+document.getElementById("answers").innerHTML="";
+
+
+document.getElementById("result").innerHTML=
+
+`
+
+<h2>得点：${score}/${quiz.length}</h2>
+
+<h2>${rank}</h2>
+
+<h3>📖 結果</h3>
+
+${results.map(x=>"<p>"+x+"</p>").join("")}
+
+
+<button onclick="shareLine()">
+💬 LINEで結果を送る
