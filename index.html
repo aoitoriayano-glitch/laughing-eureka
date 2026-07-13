@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>アメリカ歴史クイズ</title>
+<title>🇺🇸 アメリカ歴史クイズ</title>
 
 <style>
+
 body {
   font-family: sans-serif;
   text-align: center;
@@ -23,6 +25,10 @@ body {
   box-shadow: 0 0 10px #aaa;
 }
 
+h1 {
+  color: #1d4ed8;
+}
+
 button {
   width: 90%;
   padding: 15px;
@@ -32,18 +38,26 @@ button {
   background: #2563eb;
   color: white;
   font-size: 16px;
+  cursor: pointer;
 }
 
 button:hover {
-  background: #1d4ed8;
+  background: #1e40af;
+}
+
+#message {
+  font-size: 20px;
 }
 
 .review {
   text-align: left;
+  margin-top: 15px;
 }
+
 </style>
 
 </head>
+
 
 <body>
 
@@ -57,7 +71,9 @@ button:hover {
 
 <h3 id="message"></h3>
 
-<button onclick="nextQuestion()">次の問題</button>
+<button onclick="nextQuestion()">
+次の問題
+</button>
 
 <div id="result"></div>
 
@@ -66,26 +82,34 @@ button:hover {
 
 <script>
 
+
 const quiz = [
 
 {
 question:"アメリカ独立宣言が発表された年は？",
-answers:["1492年","1776年","1861年","1945年"],
+answers:[
+"1492年",
+"1776年",
+"1861年",
+"1945年"
+],
 correct:1,
 explanation:"1776年7月4日に独立宣言が採択されました。"
 },
 
+
 {
 question:"アメリカ初代大統領は誰？",
 answers:[
-"リンカーン",
-"ジェファーソン",
+"エイブラハム・リンカーン",
+"トーマス・ジェファーソン",
 "ジョージ・ワシントン",
-"ルーズベルト"
+"セオドア・ルーズベルト"
 ],
 correct:2,
 explanation:"ジョージ・ワシントンは1789年に初代大統領になりました。"
 },
+
 
 {
 question:"南北戦争の主な原因は？",
@@ -99,6 +123,7 @@ correct:1,
 explanation:"奴隷制度をめぐる対立が大きな原因でした。"
 },
 
+
 {
 question:"自由の女神像はどこの国から贈られた？",
 answers:[
@@ -108,8 +133,9 @@ answers:[
 "ドイツ"
 ],
 correct:1,
-explanation:"1886年にフランスから贈られました。"
+explanation:"1886年にフランスからアメリカへ贈られました。"
 },
+
 
 {
 question:"アメリカ国歌の元になった戦争は？",
@@ -129,6 +155,7 @@ explanation:"米英戦争中の出来事が国歌の元になりました。"
 let current = 0;
 let score = 0;
 let results = [];
+let rank = "";
 
 
 
@@ -136,16 +163,18 @@ function showQuestion(){
 
 let q = quiz[current];
 
+
 document.getElementById("question").innerText =
-(current+1)+"問目："+q.question;
+(current + 1) + "問目：" + q.question;
 
 
-let html="";
+let html = "";
 
 
-q.answers.forEach((answer,index)=>{
+q.answers.forEach(function(answer,index){
 
-html += `
+html +=
+`
 <button onclick="checkAnswer(${index})">
 ${answer}
 </button>
@@ -154,9 +183,9 @@ ${answer}
 });
 
 
-document.getElementById("answers").innerHTML=html;
+document.getElementById("answers").innerHTML = html;
 
-document.getElementById("message").innerText="";
+document.getElementById("message").innerText = "";
 
 }
 
@@ -171,15 +200,28 @@ if(index === q.correct){
 
 score++;
 
-results.push("⭕ "+q.question+" 正解："+q.answers[q.correct]);
+results.push(
+"⭕ 正解：" + q.question +
+"<br>答え：" + q.answers[q.correct] +
+"<br>解説：" + q.explanation
+);
 
-document.getElementById("message").innerText="⭕ 正解！";
+document.getElementById("message").innerText =
+"⭕ 正解！";
+
 
 }else{
 
-results.push("❌ "+q.question+" 正解："+q.answers[q.correct]);
 
-document.getElementById("message").innerText="❌ 不正解！";
+results.push(
+"❌ 不正解：" + q.question +
+"<br>正解：" + q.answers[q.correct] +
+"<br>解説：" + q.explanation
+);
+
+
+document.getElementById("message").innerText =
+"❌ 不正解！";
 
 }
 
@@ -209,43 +251,84 @@ finish();
 function finish(){
 
 
-let rank;
+if(score === 5){
 
+rank = "🏆 アメリカ歴史博士";
 
-if(score===5){
+}else if(score >= 3){
 
-rank="🏆 アメリカ歴史博士";
-
-}else if(score>=3){
-
-rank="🥇 歴史マスター";
+rank = "🥇 歴史マスター";
 
 }else{
 
-rank="🌱 歴史初心者";
+rank = "🌱 歴史初心者";
 
 }
 
 
-document.getElementById("question").innerText=
+
+document.getElementById("question").innerText =
 "🎉 クイズ終了！";
 
 
-document.getElementById("answers").innerHTML="";
+document.getElementById("answers").innerHTML = "";
 
 
-document.getElementById("result").innerHTML=
+document.getElementById("result").innerHTML =
 
 `
 
-<h2>得点：${score}/${quiz.length}</h2>
+<h2>総合得点：${score}/${quiz.length}</h2>
 
 <h2>${rank}</h2>
 
-<h3>📖 結果</h3>
+<h3>📖 答え合わせ</h3>
 
-${results.map(x=>"<p>"+x+"</p>").join("")}
+<div class="review">
+
+${results.map(function(x){
+return "<p>" + x + "</p><hr>";
+}).join("")}
+
+</div>
 
 
 <button onclick="shareLine()">
 💬 LINEで結果を送る
+</button>
+
+`;
+
+}
+
+
+
+function shareLine(){
+
+
+let text =
+
+"🇺🇸 アメリカ歴史クイズ結果\n\n" +
+"得点：" + score + "/" + quiz.length +
+"\n称号：" + rank;
+
+
+window.open(
+"https://line.me/R/msg/text/?" +
+encodeURIComponent(text)
+);
+
+
+}
+
+
+
+showQuestion();
+
+
+</script>
+
+
+</body>
+
+</html>
